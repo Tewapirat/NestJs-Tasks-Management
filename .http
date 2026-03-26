@@ -1,0 +1,104 @@
+# The basic HTTP request 
+
+### Variables
+@baseUrl = http://localhost:3000
+@contentType = application/json
+
+
+### SET ID Task
+@taskId = {{ createTask.response.body.id }}
+
+GET {{baseUrl}}
+
+
+### Get all tasks
+# @name getAllTasks
+GET {{baseUrl}}/tasks
+
+### Get all tasks by pagination
+# @name getPagination
+GET {{baseUrl}}/tasks?limit=2&offset=2
+
+
+### Get all in progress tasks
+# @name getAllInProgress
+GET {{baseUrl}}/tasks?status=IN_PROGRESS
+
+### Get all with serach query
+# @name getAllWithSearch
+GET {{baseUrl}}/tasks?search=Null
+
+
+### Get all filtered by labels
+# @name getAllFilteredByLabels
+GET {{baseUrl}}/tasks?labels=urgent,bug
+
+
+### Get all sorted
+# @name getAllSorted
+GET {{baseUrl}}/tasks?sortBy=status&sortOrder=DESC&limit=15
+
+### GET Task by ID
+GET {{baseUrl}}/tasks/{{taskId}}
+
+
+### POST Create Task
+
+# @name createTask
+POST {{baseUrl}}/tasks
+Content-Type: {{contentType}}
+
+{
+    "title": "NestJs",
+    "description": "This is a NestJs task",
+    "status": "OPEN",
+    "userId":"dbeb65b5-0841-43de-a09c-85fbdccf3f96",
+    "labels":[
+        {
+            "name":"urgent"
+        }
+
+    ]
+}
+
+
+# 68e578e6-39f5-405b-a589-78aa9fc20109
+
+### PATCH Update Task Status
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Content-Type: {{contentType}}
+
+{
+    "status": "IN_PROGRESS",
+    "labels":[{
+        "name":"done"
+    }]
+
+}
+
+
+### DELETE Task
+DELETE {{baseUrl}}/tasks/{{taskId}}
+
+
+### Add specific labels to task
+# @name addLabels
+
+POST {{baseUrl}}/tasks/{{taskId}}/labels
+Content-Type: {{contentType}}
+
+[
+    {"name": "prioritized"},
+    {"name": "bug"}
+]
+
+
+### Remove specific labels form task
+# @name removeLabels
+
+DELETE  {{baseUrl}}/tasks/{{taskId}}/labels
+Content-Type: {{contentType}}
+
+[
+    "prioritized","bug","urgent"
+]
